@@ -1,0 +1,214 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(TravelServiceApp());
+}
+
+class TravelServiceApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Travel Service',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Travel Service'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DestinationsPage(),
+                  ),
+                );
+              },
+              child: Text('View Destinations'),
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookingPage(),
+                  ),
+                );
+              },
+              child: Text('Book a Tour'),
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContactPage(),
+                  ),
+                );
+              },
+              child: Text('Contact Us'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DestinationsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Destinations'),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            title: Text('Bali'),
+          ),
+          ListTile(
+            title: Text('Yogyakarta'),
+          ),
+          ListTile(
+            title: Text('Lombok'),
+          ),
+          ListTile(
+            title: Text('Bandung'),
+          ),
+          ListTile(
+            title: Text('Surabaya'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BookingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Book a Tour'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Name',
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Destination',
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Date',
+              ),
+            ),
+            RaisedButton(
+              onPressed: () {
+                // Code to process the booking details goes here
+                // For example: saveBooking(name, destination, date);
+
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Success'),
+                    content: Text('Tour booked successfully!'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Text('Book'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ContactPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Contact Us'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Name',
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Message',
+              ),
+            ),
+            RaisedButton(
+              onPressed: () {
+                // Code to process the contact form goes here
+                // For example: sendMessage(name, email, message);
+
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Success'),
+                    content: Text('Message sent successfully!'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Text('Send'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
