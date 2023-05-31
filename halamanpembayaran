@@ -1,0 +1,181 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(TravelServiceApp());
+}
+
+class TravelServiceApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Travel Service',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Travel Service'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FlightSelectionPage(),
+              ),
+            );
+          },
+          child: Text('Order Flights'),
+        ),
+      ),
+    );
+  }
+}
+
+class FlightSelectionPage extends StatefulWidget {
+  @override
+  _FlightSelectionPageState createState() => _FlightSelectionPageState();
+}
+
+class _FlightSelectionPageState extends State<FlightSelectionPage> {
+  List<Flight> flights = [
+    Flight('ABC123', 'Jakarta', 'Bali', DateTime(2023, 6, 1, 10, 0), 1000000),
+    Flight('DEF456', 'Jakarta', 'Yogyakarta', DateTime(2023, 6, 1, 14, 0), 800000),
+    Flight('GHI789', 'Jakarta', 'Lombok', DateTime(2023, 6, 2, 9, 0), 1200000),
+  ];
+
+  Flight selectedFlight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Select a Flight'),
+      ),
+      body: ListView.builder(
+        itemCount: flights.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(flights[index].flightNumber),
+            subtitle: Text('${flights[index].origin} - ${flights[index].destination}'),
+            trailing: Text('${flights[index].price}'),
+            onTap: () {
+              setState(() {
+                selectedFlight = flights[index];
+              });
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          if (selectedFlight != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CheckoutPage(selectedFlight),
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('No Flight Selected'),
+                content: Text('Please select a flight before proceeding to checkout.'),
+                actions: [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+        label: Text('Proceed to Checkout'),
+        icon: Icon(Icons.shopping_cart),
+      ),
+    );
+  }
+}
+
+class Flight {
+  final String flightNumber;
+  final String origin;
+  final String destination;
+  final DateTime departureTime;
+  final int price;
+
+  Flight(this.flightNumber, this.origin, this.destination, this.departureTime, this.price);
+}
+
+class CheckoutPage extends StatelessWidget {
+  final Flight selectedFlight;
+
+  CheckoutPage(this.selectedFlight);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Checkout'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Selected Flight:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Text('${selectedFlight.origin} - ${selectedFlight.destination}'),
+            SizedBox(height: 16.0),
+            Text(
+              'Total Price:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Text('${selectedFlight.price}'),
+            SizedBox(height: 16.0),
+            RaisedButton(
+              onPressed: () {
+                // Code to process payment goes here
+                // For example: processPayment(selectedFlight);
+
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Payment Successful'),
+                    content: Text('Thank you for your payment!'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.popUntil(context, ModalRoute.withName('/'));
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Text('Make Payment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
