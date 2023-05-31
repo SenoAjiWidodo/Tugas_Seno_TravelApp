@@ -1,0 +1,153 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(TravelServiceApp());
+}
+
+class TravelServiceApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Travel Service',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: FlightBookingPage(),
+    );
+  }
+}
+
+class FlightBookingPage extends StatefulWidget {
+  @override
+  _FlightBookingPageState createState() => _FlightBookingPageState();
+}
+
+class _FlightBookingPageState extends State<FlightBookingPage> {
+  String departureCity;
+  String destinationCity;
+  DateTime departureDate;
+  int numOfPassengers = 1;
+
+  List<String> cities = [
+    'Jakarta',
+    'Bali',
+    'Surabaya',
+    'Yogyakarta',
+    'Bandung',
+    'Medan',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flight Booking'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DropdownButtonFormField<String>(
+              value: departureCity,
+              decoration: InputDecoration(
+                labelText: 'Departure City',
+              ),
+              items: cities.map((String city) {
+                return DropdownMenuItem<String>(
+                  value: city,
+                  child: Text(city),
+                );
+              }).toList(),
+              onChanged: (String value) {
+                setState(() {
+                  departureCity = value;
+                });
+              },
+            ),
+            SizedBox(height: 16.0),
+            DropdownButtonFormField<String>(
+              value: destinationCity,
+              decoration: InputDecoration(
+                labelText: 'Destination City',
+              ),
+              items: cities.map((String city) {
+                return DropdownMenuItem<String>(
+                  value: city,
+                  child: Text(city),
+                );
+              }).toList(),
+              onChanged: (String value) {
+                setState(() {
+                  destinationCity = value;
+                });
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              readOnly: true,
+              onTap: () async {
+                final DateTime pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2030),
+                );
+
+                if (pickedDate != null) {
+                  setState(() {
+                    departureDate = pickedDate;
+                  });
+                }
+              },
+              decoration: InputDecoration(
+                labelText: 'Departure Date',
+              ),
+              controller: TextEditingController(
+                text: departureDate != null
+                    ? '${departureDate.day}/${departureDate.month}/${departureDate.year}'
+                    : '',
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Number of Passengers',
+              ),
+              onChanged: (value) {
+                setState(() {
+                  numOfPassengers = int.tryParse(value) ?? 1;
+                });
+              },
+            ),
+            SizedBox(height: 16.0),
+            RaisedButton(
+              onPressed: () {
+                // Code to process flight booking goes here
+                // For example: bookFlight(departureCity, destinationCity, departureDate, numOfPassengers);
+
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Success'),
+                    content: Text('Flight booked successfully!'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Text('Book Flight'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
